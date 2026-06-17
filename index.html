@@ -1,33 +1,216 @@
 
-<!DOCTYPE html>
-
-<!-- 
-Name: Zachary Nguyen
-File: homework1.html
-Date Created: 06/11/2026
-Date Updated: TBD
-Purpose: MIS3371 Homework1 ....
+<!doctype html>
+<!--
+    Name:       Zachary Nguyen
+    File:       index.html
+    Date:       06/11/2026
+    Purpose:    MIS Assignment Patient intake form that requires the patient ID, First and Last name,
+    and date of birth. 
 -->
-
-
 <html>
-  
-  <head>
-    <title>Page Title</title>
-  </head>
+    <head>
+        <meta charset="utf-8">
+        <title>Bayou City Family Clinic - Patient Intake</title>
 
-       <h1>
-      My first headings
-    </h1>
+        <!-- Load external CSS styles -->
+        <link rel="stylesheet" href="style.css">
 
-      <body>
+    </head>
 
-          <p>Hello this is Zach. I just commit a new change.
-        
-         </p>
+    <body>
 
-          <p>My first paragraph.
-            
-         </p>
-        
-        </body>
+        <!-- ======== HEADER ======== -->
+        <div id="header">
+            <table>
+                <tr>
+                    <td>
+                        <img
+                            id="logo"
+                            src="hospitallogo.png"
+                            alt="Bayou City Family Clinic"
+                            height="80"
+                        >
+                    </td>
+                    <td valign="top">Bayou City Family Clinic</td>
+                    <td valign="bottom" align="right">
+                        Today's date: <span id="today">Date goes here</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <hr>
+
+        <!--BODY: Patient Intake Form-->
+        <div id="body">
+            <form action="index.html">
+                <table class="form">
+
+                    <!-- Form title -->
+                    <tr>
+                        <th class="form" colspan="2">Patient Intake Form</th>
+                    </tr>
+
+                    <!-- Patient ID -->
+                    <tr>
+                        <td class="label">
+                            <label for="patient-id">Patient ID</label>
+                        </td>
+                        <td class="field">
+                            <input
+                                type="text"
+                                id="patient-id"
+                                name="patient-id"
+                                size="15"
+                                maxlength="10"
+                                placeholder="PT-00123 (req'd)"
+                                required
+                                oninvalid="this.setCustomValidity('Patient ID is required')"
+                                oninput="this.setCustomValidity('')"
+                            >
+                        </td>
+                    </tr>
+
+                    <!-- First and Last Name -->
+                    <tr>
+                        <td class="label">
+                            <label for="firstname">First NAME</label>
+                            <label for="lastname">Last</label>
+                        </td>
+                        <td class="field">
+                            <input
+                                type="text"
+                                id="firstname"
+                                name="firstname"
+                                size="15"
+                                maxlength="30"
+                                placeholder="First (req'd)"
+                                required
+                                oninvalid="this.setCustomValidity('First Name is required')"
+                                oninput="this.setCustomValidity('')"
+                            >
+                            <input
+                                type="text"
+                                id="lastname"
+                                name="lastname"
+                                size="15"
+                                maxlength="30"
+                                placeholder="Last (req'd)"
+                                required
+                                oninvalid="this.setCustomValidity('Last Name is required')"
+                                oninput="this.setCustomValidity('')"
+                            >
+                        </td>
+                    </tr>
+
+                    <!-- Date of Birth -->
+                    <tr>
+                        <td class="label">
+                            <label for="dob">Date of Birth</label>
+                        </td>
+                        <td class="field">
+                            <input
+                                type="date"
+                                id="dob"
+                                name="dob"
+                            >
+                        </td>
+                    </tr>
+
+                    <!-- 5 Checkboxes: Reason for Visit -->
+                    <tr>
+                        <td class="label">Reason for Visit</td>
+                        <td class="field">
+
+                            <input type="checkbox" id="cb1" name="reason" value="Annual Checkup">
+                            <label for="cb1">Annual Checkup</label>
+                            <br>
+
+                            <input type="checkbox" id="cb2" name="reason" value="Follow-up">
+                            <label for="cb2">Follow-up Appointment</label>
+                            <br>
+
+                            <input type="checkbox" id="cb3" name="reason" value="New Symptoms">
+                            <label for="cb3">New Symptoms / Illness</label>
+                            <br>
+
+                            <input type="checkbox" id="cb4" name="reason" value="Prescription Refill">
+                            <label for="cb4">Prescription Refill</label>
+                            <br>
+
+                            <input type="checkbox" id="cb5" name="reason" value="Vaccination">
+                            <label for="cb5">Vaccination / Immunization</label>
+
+                        </td>
+                    </tr>
+
+                    <!-- Radio Buttons: Preferred Contact -->
+                    <tr>
+                        <td class="label">Contact Method</td>
+                        <td class="field">
+
+                            <input type="radio" id="r1" name="contact" value="Phone" checked>
+                            <label for="r1">Phone</label>
+                            <br>
+
+                            <input type="radio" id="r2" name="contact" value="Email">
+                            <label for="r2">Email</label>
+                            <br>
+
+                            <input type="radio" id="r3" name="contact" value="Text">
+                            <label for="r3">Text Message</label>
+
+                        </td>
+                    </tr>
+
+                    <!-- Slider: Pain Scale -->
+                    <tr>
+                        <td class="label">
+                            <label for="pain-scale">Pain Level (0-10)</label>
+                        </td>
+                        <td class="field">
+                            0
+                            <input
+                                type="range"
+                                id="pain-scale"
+                                name="pain-scale"
+                                min="0"
+                                max="10"
+                                step="1"
+                                value="0"
+                                oninput="document.getElementById('pain-display').innerHTML = this.value"
+                            >
+                            10 &nbsp; Selected: <span id="pain-display">0</span>
+                        </td>
+                    </tr>
+
+                    <!-- Submit and Reset buttons -->
+                    <tr>
+                        <td colspan="2">
+                            <center>
+                                <input type="submit" value="Submit">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="reset" value="Reset">
+                            </center>
+                        </td>
+                    </tr>
+
+                </table>
+            </form>
+        </div>
+
+        <!-- ======== FOOTER ======== -->
+        <div id="footer">
+            <hr>
+            Bayou City Family Clinic - Patient Intake Form... BYE!
+        </div>
+
+        <!-- Fill in today's date -->
+        <script>
+            document.getElementById("today").innerHTML = new Date().toLocaleDateString();
+        </script>
+
+    </body>
+    <!-- End of file: patient_intake_form.html -->
+</html>
+
