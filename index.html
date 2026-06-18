@@ -51,6 +51,26 @@
         <th class="form" colspan="2">Patient Intake Form</th>
         </tr>
 
+        <!-- Email Address -->
+        <tr>
+        <td class="label">
+        <label for="patient-email">Email</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="patient-email"
+            name="patient-email"
+            size="15"
+            maxlength="10"
+            placeholder="Patient Email (req'd)"
+            required
+            oninvalid="this.setCustomValidity('Patient Email is required')"
+            oninput="this.setCustomValidity('')"
+            >
+        </td>
+        </tr>
+
         <!-- Patient ID -->
         <tr>
         <td class="label">
@@ -91,7 +111,7 @@
         </td>
         </tr>
             
-        <!-- First and Last Name -->
+        <!-- First, MI, Last Name -->
         <tr>
         <td class="label">
         <label for="firstname">First Name / </label>
@@ -114,9 +134,9 @@
             type="text"
             id="middlename"
             name="M.I"
-            size="1"
+            size="5"
             maxlength="1"
-            placeholder="Middle(opt)"
+            placeholder="M.I.(opt)"
             >
         <input
             type="text"
