@@ -63,7 +63,7 @@
             name="patient-id"
             size="15"
             maxlength="10"
-            placeholder="PT-00123 (req'd)"
+            placeholder="PT-##### (req'd)"
             required
             oninvalid="this.setCustomValidity('Patient ID is required')"
             oninput="this.setCustomValidity('')"
@@ -71,10 +71,31 @@
         </td>
         </tr>
 
+        <!-- Password -->
+        <tr>
+        <td class="label">
+        <label for="password">Password</label>
+        </td>
+        <td class="field">
+        <input
+            type="password"
+            id="password"
+            ="password"
+            size="15"
+            maxlength="30"
+            placeholder="Password (req'd)"
+            required
+            oninvalid="this.setCustomValidity('Password is required')"
+            oninput="this.setCustomValidity('')"
+            >
+        </td>
+        </tr>
+            
         <!-- First and Last Name -->
         <tr>
         <td class="label">
-        <label for="firstname">First NAME</label>
+        <label for="firstname">First Name / </label>
+        <Label for="middlename">M.I./ </label>
         <label for="lastname">Last</label>
         </td>
         <td class="field">
@@ -91,6 +112,14 @@
             >
         <input
             type="text"
+            id="middlename"
+            name="M.I"
+            size="1"
+            maxlength="1"
+            placeholder="Middle(opt)"
+            >
+        <input
+            type="text"
             id="lastname"
             name="lastname"
             size="15"
@@ -102,20 +131,134 @@
             >
         </td>
         </tr>
-
+            
         <!-- Date of Birth -->
-         <tr>
+        <tr>
         <td class="label">
         <label for="dob">Date of Birth</label>
         </td>
         <td class="field">
         <input
-         type="date"
-         id="dob"
-         name="dob"
-         >
-         </td>
-         </tr>
+            type="date"
+            id="dob"
+            name="dob"
+            >
+        </td>
+        </tr>
+            
+        <!-- Social Security Number (obscured) -->
+        <tr>
+        <td class="label">
+        <label for="ssn">Social Security #</label>
+        </td>
+        <td class="field">
+        <input
+            type="password"
+            id="ssn"
+            name="ssn"
+            size="11"
+            maxlength="11"
+            placeholder="###-##-####"
+            >
+        </td>
+        </tr>
+            
+        <!-- Address -->
+        <tr>
+        <td class="label">
+        <label for="address">Address</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="address"
+            name="address"
+            size="30"
+            maxlength="30"
+            placeholder="Street Address"
+            >
+        </td>
+        </tr>
+            
+        <!-- City, State, Zip -->
+        <tr>
+        <td class="label">
+        <label for="city">City / State / Zip</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="city"
+            name="city"
+            size="20"
+            maxlength="30"
+            placeholder="City"
+            >
+            
+        <select id="state" name="state">
+            <option value="">-- State --</option>
+            <option value="AL">AL</option>
+            <option value="AK">AK</option>
+            <option value="AZ">AZ</option>
+            <option value="AR">AR</option>
+            <option value="CA">CA</option>
+            <option value="CO">CO</option>
+            <option value="CT">CT</option>
+            <option value="DE">DE</option>
+            <option value="FL">FL</option>
+            <option value="GA">GA</option>
+            <option value="HI">HI</option>
+            <option value="ID">ID</option>
+            <option value="IL">IL</option>
+            <option value="IN">IN</option>
+            <option value="IA">IA</option>
+            <option value="KS">KS</option>
+            <option value="KY">KY</option>
+            <option value="LA">LA</option>
+            <option value="ME">ME</option>
+            <option value="MD">MD</option>
+            <option value="MA">MA</option>
+            <option value="MI">MI</option>
+            <option value="MN">MN</option>
+            <option value="MS">MS</option>
+            <option value="MO">MO</option>
+            <option value="MT">MT</option>
+            <option value="NE">NE</option>
+            <option value="NV">NV</option>
+            <option value="NH">NH</option>
+            <option value="NJ">NJ</option>
+            <option value="NM">NM</option>
+            <option value="NY">NY</option>
+            <option value="NC">NC</option>
+            <option value="ND">ND</option>
+            <option value="OH">OH</option>
+            <option value="OK">OK</option>
+            <option value="OR">OR</option>
+            <option value="PA">PA</option>
+            <option value="RI">RI</option>
+            <option value="SC">SC</option>
+            <option value="SD">SD</option>
+            <option value="TN">TN</option>
+            <option value="TX" selected>TX</option>
+            <option value="UT">UT</option>
+            <option value="VT">VT</option>
+            <option value="VA">VA</option>
+            <option value="WA">WA</option>
+            <option value="WV">WV</option>
+            <option value="WI">WI</option>
+            <option value="WY">WY</option>
+        </select>
+            
+        <input
+            type="text"
+            id="zip"
+            name="zip"
+            size="5"
+            maxlength="5"
+            placeholder="Zip"
+            >
+        </td>
+        </tr>
 
          <!-- 6 Checkboxes: Reason for Visit -->
          <tr>
@@ -208,7 +351,9 @@
         <div id="footer">
         <hr>
         Bayou City Family Clinic
-        <P>Contact us</P>
+        <p>
+        <a href="mailto:info@bayoucityclinic.com">Contact Us</a>
+        </p>
         </div>
 
         <!-- Fill in today's date -->
