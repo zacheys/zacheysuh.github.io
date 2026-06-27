@@ -235,6 +235,7 @@ function checkSSN() {
         return false;
     }
     msg.innerHTML = "";
+    document.getElementById("ssn").type = "password";   // hide once they click away (used claude to help me figure this out)
     return true;
 }
 
