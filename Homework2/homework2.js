@@ -8,11 +8,10 @@
 
 /* Clears the review output. Wired to the Reset button. */
 function clearReview() {
-    document.getElementById("outputformdata").innerHTML = "(you started over)";
+    document.getElementById("outputformdata").innerHTML = "(You started over.)";
 }
 
-/* Loops through every field in the form and redisplays the entered data.
-   This is Professor Messinger's getdata1(), renamed, with the SSN masked. */
+/* Loops through every field in the form and redisplays the entered data.*/
 function reviewData() {
     var formcontents = document.getElementById("signup");
     var formoutput;
@@ -21,7 +20,7 @@ function reviewData() {
     var fieldvalue;
     var i;
 
-    formoutput = "<table class='output'><th>Dataname</th><th>Type</th><th>Value</th>";
+    formoutput = "<table class='output'><th>Dataname</th><th>Value</th>";
 
     for (i = 0; i < formcontents.length; i++) {
         fieldname  = formcontents.elements[i].name;
@@ -47,7 +46,7 @@ function reviewData() {
             case "button": case "submit": case "reset":
                 break;
             default:
-                // Mask the SSN: show only the last 4 digits.
+                // Mask the SSN.
                 if (fieldname === "ssn" && fieldvalue !== "") {
                     fieldvalue = "XXX-XX-" + fieldvalue.slice(-4);
                 }
@@ -65,9 +64,7 @@ function reviewData() {
 
 /*
    Field validators. Each grabs its value, checks it, and writes
-   a message to its own <span>. Returns true if valid, false if not.
-   Same idea as the professor's checkfirstname() example.
- */
+   a message to its own <span>. Returns true if valid, false if not.*/
 
 /* Email */
 function checkEmail() {
@@ -126,7 +123,7 @@ function checkPassword() {
         return false;
     }
     msg.className = "ok";
-    msg.innerHTML = "Password looks good.";
+    msg.innerHTML = "Password meets criteria.";
     return true;
 }
 
