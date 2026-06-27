@@ -20,11 +20,10 @@ function reviewData() {
     var fieldvalue;
     var i;
 
-    formoutput = "<table class='output'><th>Dataname</th><th>Value</th>";
+    formoutput = "<table class='output'><th>Data</th><th>Value</th>";
 
     for (i = 0; i < formcontents.length; i++) {
         fieldname  = formcontents.elements[i].name;
-        datatype   = formcontents.elements[i].type;
         fieldvalue = formcontents.elements[i].value;
         console.log("item: " + i + " " + fieldname + " = " + fieldvalue);
 
@@ -32,14 +31,12 @@ function reviewData() {
             case "checkbox":
                 if (formcontents.elements[i].checked) {
                     formoutput = formoutput + "<tr><td align='right'>" + fieldname + "</td>";
-                    formoutput = formoutput + "<td align='right'>" + datatype + "</td>";
                     formoutput = formoutput + "<td class='outputdata'>Checked</td></tr>";
                 }
                 break;
             case "radio":
                 if (formcontents.elements[i].checked) {
                     formoutput = formoutput + "<tr><td align='right'>" + fieldname + "</td>";
-                    formoutput = formoutput + "<td align='right'>" + datatype + "</td>";
                     formoutput = formoutput + "<td class='outputdata'>" + fieldvalue + "</td></tr>";
                 }
                 break;
@@ -51,7 +48,6 @@ function reviewData() {
                     fieldvalue = "XXX-XX-" + fieldvalue.slice(-4);
                 }
                 formoutput = formoutput + "<tr><td align='right'>" + fieldname + "</td>";
-                formoutput = formoutput + "<td align='right'>" + datatype + "</td>";
                 formoutput = formoutput + "<td class='outputdata'>" + fieldvalue + "</td></tr>";
         }
     }
