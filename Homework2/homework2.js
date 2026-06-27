@@ -206,6 +206,22 @@ function checkDOB() {
     return true;
 }
 
+/* Auto-inserts the dashes as the user types the SSN. */
+function formatSSN() {
+    var field = document.getElementById("ssn");
+    var digits = field.value.replace(/\D/g, "");   // strip out anything that isn't a digit
+    if (digits.length > 9) {                        // never more than 9 digits
+        digits = digits.slice(0, 9);
+    }
+    if (digits.length > 5) {                         // ###-##-####
+        field.value = digits.slice(0, 3) + "-" + digits.slice(3, 5) + "-" + digits.slice(5);
+    } else if (digits.length > 3) {                  // ###-##
+        field.value = digits.slice(0, 3) + "-" + digits.slice(3);
+    } else {                                         // ###
+        field.value = digits;
+    }
+}
+
 /* Social Security Number: ###-##-#### */
 function checkSSN() {
     var x = document.getElementById("ssn").value;
