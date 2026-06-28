@@ -2,7 +2,8 @@
     Name:    Zachary Nguyen
     File:    homework2.js
     Date:    06/26/2026
-    Purpose: Redisplay and validate data from the Bayou City Family Clinic intake form.
+    Purpose: Redisplay and validate data from the Bayou City Family Clinic intake form. Referenced patterns from the sheet.
+    Used Claude to help with the patterns in SSN, email, PatientID, and password. 
     Class:   MIS3371 | Professor Messinger | Assignment 2
 */
 
