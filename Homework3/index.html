@@ -75,30 +75,29 @@
         </td>
         </tr>
 
-        <!-- Desired User ID -->
-        <tr>
-            <td class="label">
-            <label for="userid">Desired User ID</label>
-            </td>
-            <td class="field">
-            <input
-                type="text"
-                id="userid"
-                name="userid"
-                size="20"
-                minlength="5"
-                maxlength="20"
-                placeholder="5-20 chars (req'd)"
-                pattern="[A-Za-z][A-Za-z0-9_-]{4,19}"
-                title="5-20 characters; must start with a letter; letters, numbers, dash and underscore only"
-                onblur="checkUserID()"
-                required
-                oninvalid="this.setCustomValidity('User ID is required')"
-                oninput="this.setCustomValidity(''); checkUserID()"
-                >
-            <br><span class="error" id="userid-error"></span>
-            </td>
-            </tr>
+       <!-- Patient ID -->
+       <tr>
+        <td class="label">
+        <label for="patient-id">Patient ID</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="patient-id"
+            name="patient-id"
+            size="15"
+            maxlength="8"
+            placeholder="PT-##### (req'd)"
+            pattern="PT-[0-9]{5}"
+            title="Patient ID format: PT- followed by 5 digits, e.g. PT-12345"
+            onblur="checkID()"
+            required
+            oninvalid="this.setCustomValidity('Patient ID is required')"
+            oninput="this.setCustomValidity('')"
+            >
+        <br><span class="error" id="id-error"></span>
+        </td>
+        </tr>
 
         <!-- Password -->
         <tr>
