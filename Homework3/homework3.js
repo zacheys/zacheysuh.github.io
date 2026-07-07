@@ -1,20 +1,22 @@
 /*
     Name:    Zachary Nguyen
     File:    homework3.js
-    Date:    06/26/2026
-    Purpose: Redisplay and validate data from the Bayou City Family Clinic intake form. Referenced patterns from the sheet.
-    Used Claude to help with the patterns in SSN, email, PatientID, and password. 
-    Class:   MIS3371 | Professor Messinger | Assignment 2
+    Date:    07/06/2026
+    Purpose: Validate the Bayou City Family Clinic intake form on the fly.
+             Every field warns the user as they type or leave it, and again
+             when the VALIDATE button is pressed. The real Submit button stays
+             hidden until there are zero errors.
+    Class:   MIS3371 | Professor Messinger | Assignment 3
 */
 
-/* Clears the review output. Wired to the Reset button. */
+/* Clears the review output and re-hides Submit. Wired to the Reset button. */
 function clearReview() {
     document.getElementById("outputformdata").innerHTML = "(You started over.)";
     document.getElementById("submitBtn").style.display = "none";
     document.getElementById("form-status").innerHTML = "";
 }
 
-/* Loops through every field in the form and redisplays the entered data.*/
+/* Loops through every field in the form and redisplays the entered data. */
 function reviewData() {
     var formcontents = document.getElementById("signup");
     var formoutput;
@@ -64,12 +66,13 @@ function reviewData() {
 
 /*
    Field validators. Each grabs its value, checks it, and writes
-   a message to its own <span>. Returns true if valid, false if not.*/
+   a message to its own <span>. Returns true if valid, false if not.
+*/
 
-/* Email */
+/* Email: force lower case, then validate */
 function checkEmail() {
-    var x = document.getElementById("patient-email").value;
-    field.value = field.value.toLowerCase();
+    var field = document.getElementById("patient-email");
+    field.value = field.value.toLowerCase();   // force lower case
     var x = field.value;
     var msg = document.getElementById("email-error");
     if (x === "") {
@@ -83,6 +86,7 @@ function checkEmail() {
     msg.innerHTML = "";
     return true;
 }
+
 /* Patient ID: PT- followed by 5 digits */
 function checkID() {
     var x = document.getElementById("patient-id").value;
@@ -170,6 +174,19 @@ function checkFirstname() {
     return true;
 }
 
+/* Middle Initial: optional, but if entered must be one letter */
+function checkMI() {
+    var x = document.getElementById("middlename").value;
+    var msg = document.getElementById("mi-error");
+    if (x === "") { msg.innerHTML = ""; return true; }
+    if (!/^[A-Za-z]$/.test(x)) {
+        msg.innerHTML = "Middle initial must be a single letter.";
+        return false;
+    }
+    msg.innerHTML = "";
+    return true;
+}
+
 /* Last Name: letters only */
 function checkLastname() {
     var x = document.getElementById("lastname").value;
@@ -239,11 +256,11 @@ function checkSSN() {
         return false;
     }
     msg.innerHTML = "";
-    document.getElementById("ssn").type = "password";   // hide once they click away (used claude to help me figure this out)
+    document.getElementById("ssn").type = "password";   // hide once they click away
     return true;
 }
 
-/* Address */
+/* Address Line 1: required */
 function checkAddress() {
     var x = document.getElementById("address").value;
     var msg = document.getElementById("address-error");
@@ -253,50 +270,6 @@ function checkAddress() {
     }
     if (x.length < 5) {
         msg.innerHTML = "Please enter a full street address.";
-        return false;
-    }
-    msg.innerHTML = "";
-    return true;
-}
-
-/* ZIP: 5 digits */
-function checkZip() {
-    var x = document.getElementById("zip").value;
-    var msg = document.getElementById("zip-error");
-    if (x === "") {
-        msg.innerHTML = "ZIP is required.";
-        return false;
-    }
-    if (!/^\d{5}$/.test(x)) {
-        msg.innerHTML = "ZIP must be 5 digits.";
-        return false;
-    }
-    msg.innerHTML = "";
-    return true;
-}
-
-/* Phone: optional, but checked if filled in (###-###-####) */
-function checkPhone() {
-    var x = document.getElementById("phone").value;
-    var msg = document.getElementById("phone-error");
-    if (x === "") {
-        msg.innerHTML = "";
-        return true;
-    }
-    if (!/^\d{3}-\d{3}-\d{4}$/.test(x)) {
-        msg.innerHTML = "Format must be ###-###-####.";
-        return false;
-    }
-    msg.innerHTML = "";
-    return true;
-}
-/* Middle Initial: optional, but if entered must be one letter */
-function checkMI() {
-    var x = document.getElementById("middlename").value;
-    var msg = document.getElementById("mi-error");
-    if (x === "") { msg.innerHTML = ""; return true; }
-    if (!/^[A-Za-z]$/.test(x)) {
-        msg.innerHTML = "Middle initial must be a single letter.";
         return false;
     }
     msg.innerHTML = "";
@@ -343,10 +316,43 @@ function checkState() {
     msg.innerHTML = "";
     return true;
 }
+
+/* ZIP: 5 digits */
+function checkZip() {
+    var x = document.getElementById("zip").value;
+    var msg = document.getElementById("zip-error");
+    if (x === "") {
+        msg.innerHTML = "ZIP is required.";
+        return false;
+    }
+    if (!/^\d{5}$/.test(x)) {
+        msg.innerHTML = "ZIP must be 5 digits.";
+        return false;
+    }
+    msg.innerHTML = "";
+    return true;
+}
+
+/* Phone: optional, but checked if filled in (###-###-####) */
+function checkPhone() {
+    var x = document.getElementById("phone").value;
+    var msg = document.getElementById("phone-error");
+    if (x === "") {
+        msg.innerHTML = "";
+        return true;
+    }
+    if (!/^\d{3}-\d{3}-\d{4}$/.test(x)) {
+        msg.innerHTML = "Format must be ###-###-####.";
+        return false;
+    }
+    msg.innerHTML = "";
+    return true;
+}
+
 /* VALIDATE button: checks EVERY field, counts errors, and only
    reveals the real Submit button when the count is 0. Also used
    as the form's final onsubmit gate. */
-   function validateForm() {
+function validateForm() {
     var errors = 0;
     if (!checkEmail())     { errors++; }
     if (!checkUserID())    { errors++; }
@@ -379,4 +385,4 @@ function checkState() {
     return false;
 }
 
-/* End of document: homework2.js */
+/* End of document: homework3.js */
