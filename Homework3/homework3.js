@@ -10,6 +10,8 @@
 /* Clears the review output. Wired to the Reset button. */
 function clearReview() {
     document.getElementById("outputformdata").innerHTML = "(You started over.)";
+    document.getElementById("submitBtn").style.display = "none";
+    document.getElementById("form-status").innerHTML = "";
 }
 
 /* Loops through every field in the form and redisplays the entered data.*/
@@ -81,7 +83,6 @@ function checkEmail() {
     msg.innerHTML = "";
     return true;
 }
-
 /* Patient ID: PT- followed by 5 digits */
 function checkID() {
     var x = document.getElementById("patient-id").value;
@@ -120,6 +121,12 @@ function checkPassword() {
     if (!/[0-9]/.test(x)) {
         msg.className = "error";
         msg.innerHTML = "Password needs a number.";
+        return false;
+    }
+    var uid = document.getElementById("userid").value;
+    if (uid !== "" && x === uid) {
+        msg.className = "error";
+        msg.innerHTML = "Password cannot be the same as your User ID.";
         return false;
     }
     msg.className = "ok";
@@ -283,23 +290,93 @@ function checkPhone() {
     msg.innerHTML = "";
     return true;
 }
+/* Middle Initial: optional, but if entered must be one letter */
+function checkMI() {
+    var x = document.getElementById("middlename").value;
+    var msg = document.getElementById("mi-error");
+    if (x === "") { msg.innerHTML = ""; return true; }
+    if (!/^[A-Za-z]$/.test(x)) {
+        msg.innerHTML = "Middle initial must be a single letter.";
+        return false;
+    }
+    msg.innerHTML = "";
+    return true;
+}
 
-/* Runs every check. Used by the Submit button (onsubmit).
-   Returns false to stop submission if anything is invalid. */
-function validateForm() {
-    var ok = true;
-    if (!checkEmail())     { ok = false; }
-    if (!checkID())        { ok = false; }
-    if (!checkPassword())  { ok = false; }
-    if (!checkConfirm())   { ok = false; }
-    if (!checkFirstname()) { ok = false; }
-    if (!checkLastname())  { ok = false; }
-    if (!checkDOB())       { ok = false; }
-    if (!checkSSN())       { ok = false; }
-    if (!checkAddress())   { ok = false; }
-    if (!checkZip())       { ok = false; }
-    if (!checkPhone())     { ok = false; }
-    return ok;
+/* Address Line 2: optional, but if entered must be 2 to 30 characters */
+function checkAddress2() {
+    var x = document.getElementById("address2").value;
+    var msg = document.getElementById("address2-error");
+    if (x === "") { msg.innerHTML = ""; return true; }
+    if (x.length < 2 || x.length > 30) {
+        msg.innerHTML = "Address Line 2 must be 2 to 30 characters.";
+        return false;
+    }
+    msg.innerHTML = "";
+    return true;
+}
+
+/* City: required, 2 to 30 letters */
+function checkCity() {
+    var x = document.getElementById("city").value;
+    var msg = document.getElementById("city-error");
+    if (x === "") {
+        msg.innerHTML = "City is required.";
+        return false;
+    }
+    if (!/^[A-Za-z '-]{2,30}$/.test(x)) {
+        msg.innerHTML = "City must be 2 to 30 letters.";
+        return false;
+    }
+    msg.innerHTML = "";
+    return true;
+}
+
+/* State: required, cannot be the blank first option */
+function checkState() {
+    var x = document.getElementById("state").value;
+    var msg = document.getElementById("state-error");
+    if (x === "") {
+        msg.innerHTML = "Please choose a state.";
+        return false;
+    }
+    msg.innerHTML = "";
+    return true;
+}
+/* VALIDATE button: checks EVERY field, counts errors, and only
+   reveals the real Submit button when the count is 0. Also used
+   as the form's final onsubmit gate. */
+   function validateForm() {
+    var errors = 0;
+    if (!checkEmail())     { errors++; }
+    if (!checkUserID())    { errors++; }
+    if (!checkPassword())  { errors++; }
+    if (!checkConfirm())   { errors++; }
+    if (!checkFirstname()) { errors++; }
+    if (!checkMI())        { errors++; }
+    if (!checkLastname())  { errors++; }
+    if (!checkDOB())       { errors++; }
+    if (!checkSSN())       { errors++; }
+    if (!checkAddress())   { errors++; }
+    if (!checkAddress2())  { errors++; }
+    if (!checkCity())      { errors++; }
+    if (!checkState())     { errors++; }
+    if (!checkZip())       { errors++; }
+    if (!checkPhone())     { errors++; }
+
+    var status = document.getElementById("form-status");
+    var submitBtn = document.getElementById("submitBtn");
+
+    if (errors === 0) {
+        status.className = "ok";
+        status.innerHTML = "All fields look good. You can now submit.";
+        submitBtn.style.display = "inline";
+        return true;
+    }
+    status.className = "error";
+    status.innerHTML = "Please fix the " + errors + " field(s) above, then click Validate again.";
+    submitBtn.style.display = "none";
+    return false;
 }
 
 /* End of document: homework2.js */
