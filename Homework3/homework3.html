@@ -1,0 +1,478 @@
+
+<!doctype html>
+<!--
+    Name:       Zachary Nguyen
+    File:       index.html
+    Date:       06/26/2026
+    Purpose:    MIS Assignment Patient intake form that requires the patient ID, First and Last name,and date of birth.
+    Class: MIS3371 | Professor Messinger | Assignment 2 
+-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Bayou City Family Clinic - Patient Intake</title>
+
+        <!-- external CSS styles file -->
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+
+    <body>
+
+        <!-- HEADER -->
+        <div id="header">
+        <table>
+        <tr>
+        <td>
+        <img
+            id="logo"
+            src="hospitallogo.png"
+            alt="Bayou City Family Clinic"
+            height="150"
+            >
+        </td>
+      <td valign="top">Bayou City Family Clinic</td>
+      <td valign="bottom" align="right">
+      Today's date: <span id="today">Date goes here</span>
+      </td>
+      </tr>
+      </table>
+      </div>
+
+      <hr>
+
+      <!--BODY: Patient Intake Form-->
+      <div id="body">
+        <form action="index.html" id="signup" onsubmit="return validateForm()">
+        <table class="form">
+
+        <!-- Form title -->
+        <tr>
+        <th class="form" colspan="2">Patient Intake Form</th>
+        </tr>
+
+        <!-- Email Address -->
+        <tr>
+        <td class="label">
+        <label for="patient-email">Email</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="patient-email"
+            name="patient-email"
+            size="15"
+            maxlength="50"
+            placeholder="Patient Email (req'd)"
+            pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+            title="Enter a valid email address, e.g. name@example.com"
+            onblur="checkEmail()"
+            required
+            oninvalid="this.setCustomValidity('Patient Email is required')"
+            oninput="this.setCustomValidity('')"
+            >
+        <br><span class="error" id="email-error"></span>
+        </td>
+        </tr>
+
+        <!-- Patient ID -->
+        <tr>
+        <td class="label">
+        <label for="patient-id">Patient ID</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="patient-id"
+            name="patient-id"
+            size="15"
+            maxlength="8"
+            placeholder="PT-##### (req'd)"
+            pattern="PT-[0-9]{5}"
+            title="Patient ID format: PT- followed by 5 digits, e.g. PT-12345"
+            onblur="checkID()"
+            required
+            oninvalid="this.setCustomValidity('Patient ID is required')"
+            oninput="this.setCustomValidity('')"
+            >
+        <br><span class="error" id="id-error"></span>
+        </td>
+        </tr>
+
+        <!-- Password -->
+        <tr>
+        <td class="label">
+        <label for="password">Password</label>
+        </td>
+        <td class="field">
+        <input
+            type="password"
+            id="password"
+            name="password"
+            size="15"
+            maxlength="30"
+            placeholder="Password (req'd)"
+            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}"
+            title="8-30 characters, with at least one uppercase letter, one lowercase letter, and one number"
+            required
+            oninvalid="this.setCustomValidity('Password is required')"
+            oninput="this.setCustomValidity(''); checkPassword()"
+            >
+        <br><span class="error" id="password-error"></span>
+        </td>
+        </tr>
+
+        <!-- Confirm Password -->
+        <tr>
+        <td class="label">
+        <label for="password-confirm">Confirm Password</label>
+        </td>
+        <td class="field">
+        <input
+            type="password"
+            id="password-confirm"
+            name="password-confirm"
+            size="15"
+            maxlength="30"
+            placeholder="Re-enter password (req'd)"
+            title="Re-enter the same password to confirm"
+            oninput="checkConfirm()"
+            required
+            >
+        <br><span class="error" id="confirm-error"></span>
+        </td>
+        </tr>
+
+        <!-- First, MI, Last Name -->
+        <tr>
+        <td class="label">
+        <label for="firstname">First Name / </label>
+        <label for="middlename">M.I./ </label>
+        <label for="lastname">Last</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            size="15"
+            maxlength="30"
+            placeholder="First (req'd)"
+            pattern="[A-Za-z'-]{1,30}"
+            title="First name, letters only"
+            onblur="checkFirstname()"
+            required
+            oninvalid="this.setCustomValidity('First Name is required')"
+            oninput="this.setCustomValidity('')"
+            >
+        <input
+            type="text"
+            id="middlename"
+            name="M.I"
+            size="5"
+            maxlength="1"
+            placeholder="M.I.(opt)"
+            pattern="[A-Za-z]?"
+            title="Single middle initial (optional)"
+            >
+        <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            size="15"
+            maxlength="30"
+            placeholder="Last (req'd)"
+            pattern="[A-Za-z'-]{1,30}"
+            title="Last name, letters only"
+            onblur="checkLastname()"
+            required
+            oninvalid="this.setCustomValidity('Last Name is required')"
+            oninput="this.setCustomValidity('')"
+            >
+        <br><span class="error" id="firstname-error"></span>
+        <span class="error" id="lastname-error"></span>
+        </td>
+        </tr>
+
+        <!-- Date of Birth -->
+        <tr>
+        <td class="label">
+        <label for="dob">Date of Birth</label>
+        </td>
+        <td class="field">
+        <input
+            type="date"
+            id="dob"
+            name="dob"
+            title="Select your date of birth (cannot be in the future)"
+            onblur="checkDOB()"
+            >
+        <br><span class="error" id="dob-error"></span>
+        </td>
+        </tr>
+
+        <!-- Social Security Number (obscured) -->
+        <tr>
+        <td class="label">
+        <label for="ssn">Social Security #</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="ssn"
+            name="ssn"
+            size="11"
+            maxlength="11"
+            placeholder="###-##-####"
+            pattern="[0-9]{3}-[0-9]{2}-[0-9]{4}"
+            title="Format: ###-##-#### (digits and dashes)"
+            oninput="formatSSN()"
+            onfocus="this.type='text'"
+            onblur="checkSSN()"
+            >
+        <br><span class="error" id="ssn-error"></span>
+        </td>
+        </tr>
+
+        <!-- Address -->
+        <tr>
+        <td class="label">
+        <label for="address">Address</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="address"
+            name="address"
+            size="30"
+            maxlength="30"
+            placeholder="Street Address"
+            pattern="[A-Za-z0-9 .,#-]{5,30}"
+            title="Enter your street address, e.g. 123 Main St"
+            onblur="checkAddress()"
+            >
+        <br><span class="error" id="address-error"></span>
+        </td>
+        </tr>
+
+        <!-- City, State, Zip, Code used from professors -->
+        <tr>
+        <td class="label">
+        <label for="city">City / State / Zip</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="city"
+            name="city"
+            size="20"
+            maxlength="30"
+            placeholder="City"
+            >
+            
+        <select id="state" name="state">
+            <option value="">-- State --</option>
+            <option value="AL">AL</option>
+            <option value="AK">AK</option>
+            <option value="AZ">AZ</option>
+            <option value="AR">AR</option>
+            <option value="CA">CA</option>
+            <option value="CO">CO</option>
+            <option value="CT">CT</option>
+            <option value="DE">DE</option>
+            <option value="FL">FL</option>
+            <option value="GA">GA</option>
+            <option value="HI">HI</option>
+            <option value="ID">ID</option>
+            <option value="IL">IL</option>
+            <option value="IN">IN</option>
+            <option value="IA">IA</option>
+            <option value="KS">KS</option>
+            <option value="KY">KY</option>
+            <option value="LA">LA</option>
+            <option value="ME">ME</option>
+            <option value="MD">MD</option>
+            <option value="MA">MA</option>
+            <option value="MI">MI</option>
+            <option value="MN">MN</option>
+            <option value="MS">MS</option>
+            <option value="MO">MO</option>
+            <option value="MT">MT</option>
+            <option value="NE">NE</option>
+            <option value="NV">NV</option>
+            <option value="NH">NH</option>
+            <option value="NJ">NJ</option>
+            <option value="NM">NM</option>
+            <option value="NY">NY</option>
+            <option value="NC">NC</option>
+            <option value="ND">ND</option>
+            <option value="OH">OH</option>
+            <option value="OK">OK</option>
+            <option value="OR">OR</option>
+            <option value="PA">PA</option>
+            <option value="RI">RI</option>
+            <option value="SC">SC</option>
+            <option value="SD">SD</option>
+            <option value="TN">TN</option>
+            <option value="TX" selected>TX</option>
+            <option value="UT">UT</option>
+            <option value="VT">VT</option>
+            <option value="VA">VA</option>
+            <option value="WA">WA</option>
+            <option value="WV">WV</option>
+            <option value="WI">WI</option>
+            <option value="WY">WY</option>
+        </select>
+            
+        <input
+            type="text"
+            id="zip"
+            name="zip"
+            size="5"
+            maxlength="5"
+            placeholder="Zip"
+            pattern="[0-9]{5}"
+            title="5-digit ZIP code"
+            onblur="checkZip()"
+            >
+        <br><span class="error" id="zip-error"></span>
+        </td>
+        </tr>
+
+        <!-- Phone -->
+        <tr>
+        <td class="label">
+        <label for="phone">Phone</label>
+        </td>
+        <td class="field">
+        <input
+            type="text"
+            id="phone"
+            name="phone"
+            size="12"
+            maxlength="12"
+            placeholder="###-###-####"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            title="Format: ###-###-#### (digits and dashes)"
+            onblur="checkPhone()"
+            >
+        <br><span class="error" id="phone-error"></span>
+        </td>
+        </tr>
+
+         <!-- 6 Checkboxes: Reason for Visit -->
+         <tr>
+         <td class="label">Reason for Visit</td>
+         <td class="field">
+
+        <input type="checkbox" id="cb1" name="reason" value="Annual Checkup">
+        <label for="cb1">Annual Checkup</label>
+        <br>
+
+         <input type="checkbox" id="cb2" name="reason" value="Follow-up">
+         <label for="cb2">Follow-up Appointment</label>
+         <br>
+
+         <input type="checkbox" id="cb3" name="reason" value="New Symptoms">
+         <label for="cb3">New Symptoms / Illness</label>
+         <br>
+
+         <input type="checkbox" id="cb4" name="reason" value="Prescription Refill">
+         <label for="cb4">Prescription Refill</label>
+         <br>
+
+        <input type="checkbox" id="cb5" name="reason" value="Vaccination">
+        <label for="cb5">Vaccination / Immunization</label>
+        <br>
+
+        <input type="checkbox" id="cb6" name="reason" value="Other">
+        <label for="cb6">Other</label>
+        <br>
+
+        </td>
+        </tr>
+
+        <!-- Radio Buttons: Preferred Contact -->
+        <tr>
+        <td class="label">Contact Method</td>
+        <td class="field">
+
+        <input type="radio" id="r1" name="contact" value="Phone" checked>
+        <label for="r1">Phone</label>
+        <br>
+
+        <input type="radio" id="r2" name="contact" value="Email">
+        <label for="r2">Email</label>
+        <br>
+
+        <input type="radio" id="r3" name="contact" value="Text">
+        <label for="r3">Text Message</label>
+
+        </td>
+        </tr>
+
+         <!-- Slider: Pain Scale -->
+        <tr>
+        <td class="label">
+        <label for="pain-scale">Pain Level (0-10)</label>
+        </td>
+        <td class="field">
+        0
+        <input
+        type="range"
+        id="pain-scale"
+        name="pain-scale"
+        min="0"
+        max="10"
+        step="1"
+        value="0"
+        oninput="document.getElementById('pain-display').innerHTML = this.value"
+        >
+        10 &nbsp; Selected: <span id="pain-display">0</span>
+        </td>
+        </tr>
+
+        <!-- Review, Submit and Reset buttons -->
+        <tr>
+        <td colspan="2">
+        <center>
+        <input type="button" value="Review" onclick="reviewData()">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" value="Submit">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="reset" value="Reset" onclick="clearReview()">
+        </center>
+        </td>
+        </tr>
+
+        <!-- Review output area (filled in by reviewData() in homework3.js) -->
+        <tr>
+        <td colspan="2">
+        <div id="outputformdata"></div>
+        </td>
+        </tr>
+
+        </table>
+        </form>
+        </div>
+
+        <!-- FOOTER, Example Email Contact (Not real) -->
+        <div id="footer">
+        <hr>
+        Bayou City Family Clinic
+        <p>
+        <a href="mailto:info@bayoucityclinic.com">Contact Us</a>
+        </p>
+        </div>
+
+        <!-- Fill in today's date -->
+        <script>
+            document.getElementById("today").innerHTML = new Date().toLocaleDateString();
+        </script>
+
+        <!-- external JavaScript validation file -->
+        <script src="homework3.js"></script>
+
+    </body>
+    <!-- End of file: index.html -->
+</html>

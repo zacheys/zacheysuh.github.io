@@ -1,0 +1,83 @@
+/* 
+   File:    style.css
+   Name:    Zachary Nguyen
+   Date:    06/11/2026
+   Purpose: External stylesheet for index.html applies the styling for the
+   Class: MIS3371 | Professor Messinger | Assignment 1 / Assignment 2 / Assignment 3
+   .html file
+*/
+
+
+/*Page background and font*/
+body {
+    background-color: white;
+    font-family: Garamond, Garamond, serif;
+    font-size: 20px;
+}
+
+
+/* Header table*/
+#header table {
+    width: 100%;
+}
+
+#header td {
+    font-size: 30px;
+}
+
+
+/*  Horizontal divider */
+hr {
+    border: 1px solid blue;
+}
+
+
+/* Main form table */
+table.form {
+    background-color: gray;
+    color: white;
+    border: 2px solid blue;
+}
+
+th.form {
+    font-size: 18px;
+    padding: 8px;
+    text-align: center;
+}
+
+td.label {
+    text-align: right;
+    padding: 4px 6px;
+}
+
+td.field {
+    padding: 4px 6px;
+}
+
+
+/*  Input fields */
+input[type="text"],
+input[type="date"] {
+    background-color: white;
+}
+
+
+/*  Footer  */
+#footer {
+    padding: 4px;
+}
+
+/*  Validation messages: red = error, green = ok.*/
+.error {
+        color: red;
+        display: block;
+        min-height: 1.2em;
+        font-size: 14px;
+}
+    
+.ok {
+        color: lightgreen;
+        display: block;
+        min-height: 1.2em;
+        font-size: 14px;
+}
