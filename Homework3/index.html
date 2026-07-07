@@ -43,7 +43,7 @@
 
       <!--BODY: Patient Intake Form-->
       <div id="body">
-        <form action="index.html" id="signup" onsubmit="return validateForm()">
+        <form action="thankyou.html" id="signup" onsubmit="return validateForm()">
         <table class="form">
 
         <!-- Form title -->
@@ -69,35 +69,36 @@
             onblur="checkEmail()"
             required
             oninvalid="this.setCustomValidity('Patient Email is required')"
-            oninput="this.setCustomValidity('')"
+            oninput="this.setCustomValidity(''); checkEmail()"
             >
         <br><span class="error" id="email-error"></span>
         </td>
         </tr>
 
-        <!-- Patient ID -->
+        <!-- Desired User ID -->
         <tr>
-        <td class="label">
-        <label for="patient-id">Patient ID</label>
-        </td>
-        <td class="field">
-        <input
-            type="text"
-            id="patient-id"
-            name="patient-id"
-            size="15"
-            maxlength="8"
-            placeholder="PT-##### (req'd)"
-            pattern="PT-[0-9]{5}"
-            title="Patient ID format: PT- followed by 5 digits, e.g. PT-12345"
-            onblur="checkID()"
-            required
-            oninvalid="this.setCustomValidity('Patient ID is required')"
-            oninput="this.setCustomValidity('')"
-            >
-        <br><span class="error" id="id-error"></span>
-        </td>
-        </tr>
+            <td class="label">
+            <label for="userid">Desired User ID</label>
+            </td>
+            <td class="field">
+            <input
+                type="text"
+                id="userid"
+                name="userid"
+                size="20"
+                minlength="5"
+                maxlength="20"
+                placeholder="5-20 chars (req'd)"
+                pattern="[A-Za-z][A-Za-z0-9_-]{4,19}"
+                title="5-20 characters; must start with a letter; letters, numbers, dash and underscore only"
+                onblur="checkUserID()"
+                required
+                oninvalid="this.setCustomValidity('User ID is required')"
+                oninput="this.setCustomValidity(''); checkUserID()"
+                >
+            <br><span class="error" id="userid-error"></span>
+            </td>
+            </tr>
 
         <!-- Password -->
         <tr>
@@ -174,6 +175,8 @@
             placeholder="M.I.(opt)"
             pattern="[A-Za-z]?"
             title="Single middle initial (optional)"
+            onblur="checkMI()"
+            oninput="checkMI()"
             >
         <input
             type="text"
@@ -189,8 +192,9 @@
             oninvalid="this.setCustomValidity('Last Name is required')"
             oninput="this.setCustomValidity('')"
             >
-        <br><span class="error" id="firstname-error"></span>
-        <span class="error" id="lastname-error"></span>
+            <br><span class="error" id="firstname-error"></span>
+            <span class="error" id="mi-error"></span>
+            <span class="error" id="lastname-error"></span>
         </td>
         </tr>
 
@@ -237,7 +241,7 @@
         <!-- Address -->
         <tr>
         <td class="label">
-        <label for="address">Address</label>
+            <label for="address">Address Line 1</label>
         </td>
         <td class="field">
         <input
@@ -255,22 +259,46 @@
         </td>
         </tr>
 
+    <!-- Address Line 2 (optional) -->
+    <tr>
+    <td class="label">
+    <label for="address2">Address Line 2</label>
+    </td>
+    <td class="field">
+    <input
+        type="text"
+        id="address2"
+        name="address2"
+        size="30"
+        maxlength="30"
+        placeholder="Apt, suite, etc. (optional)"
+        title="Optional. If used, 2 to 30 characters."
+        onblur="checkAddress2()"
+        oninput="checkAddress2()"
+        >
+    <br><span class="error" id="address2-error"></span>
+    </td>
+    </tr>
+
         <!-- City, State, Zip, Code used from professors -->
         <tr>
         <td class="label">
         <label for="city">City / State / Zip</label>
         </td>
         <td class="field">
-        <input
+            <input
             type="text"
             id="city"
             name="city"
             size="20"
             maxlength="30"
-            placeholder="City"
+            placeholder="City (req'd)"
+            title="Required. City name, 2 to 30 letters."
+            onblur="checkCity()"
+            oninput="checkCity()"
             >
             
-        <select id="state" name="state">
+            <select id="state" name="state" title="Please choose a state (required)" onchange="checkState()">
             <option value="">-- State --</option>
             <option value="AL">AL</option>
             <option value="AK">AK</option>
@@ -314,7 +342,7 @@
             <option value="SC">SC</option>
             <option value="SD">SD</option>
             <option value="TN">TN</option>
-            <option value="TX" selected>TX</option>
+            <option value="TX">TX</option>
             <option value="UT">UT</option>
             <option value="VT">VT</option>
             <option value="VA">VA</option>
@@ -322,6 +350,8 @@
             <option value="WV">WV</option>
             <option value="WI">WI</option>
             <option value="WY">WY</option>
+            <option value="DC">DC</option>
+            <option value="PR">PR</option>
         </select>
             
         <input
@@ -335,7 +365,9 @@
             title="5-digit ZIP code"
             onblur="checkZip()"
             >
-        <br><span class="error" id="zip-error"></span>
+            <br><span class="error" id="city-error"></span>
+            <span class="error" id="state-error"></span>
+            <span class="error" id="zip-error"></span>
         </td>
         </tr>
 
@@ -392,22 +424,21 @@
         </td>
         </tr>
 
-        <!-- Radio Buttons: Preferred Contact -->
-        <tr>
-        <td class="label">Contact Method</td>
-        <td class="field">
-
-        <input type="radio" id="r1" name="contact" value="Phone" checked>
-        <label for="r1">Phone</label>
-        <br>
-
-        <input type="radio" id="r2" name="contact" value="Email">
-        <label for="r2">Email</label>
-        <br>
-
-        <input type="radio" id="r3" name="contact" value="Text">
-        <label for="r3">Text Message</label>
-
+       <!-- Review, Validate, Submit and Reset buttons -->
+       <tr>
+        <td colspan="2">
+        <center>
+        <input type="button" value="Review" onclick="reviewData()">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" value="Validate" onclick="validateForm()">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <!-- Submit stays hidden until Validate finds zero errors -->
+        <input type="submit" id="submitBtn" value="Submit" style="display:none">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="reset" value="Reset" onclick="clearReview()">
+        <br><br>
+        <span id="form-status"></span>
+        </center>
         </td>
         </tr>
 
@@ -432,6 +463,23 @@
         </td>
         </tr>
 
+<!-- Free-text description -->
+<tr>
+    <td class="label">
+    <label for="symptoms">Describe Symptoms</label>
+    </td>
+    <td class="field">
+    <textarea
+        id="symptoms"
+        name="symptoms"
+        rows="3"
+        cols="40"
+        maxlength="500"
+        placeholder="Briefly describe your symptoms or reason for visit (optional)"
+        title="Optional. Up to 500 characters."
+        ></textarea>
+    </td>
+    </tr>
         <!-- Review, Submit and Reset buttons -->
         <tr>
         <td colspan="2">
