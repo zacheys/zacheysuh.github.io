@@ -1,13 +1,214 @@
 /*
     Name:    Zachary Nguyen
-    File:    homework3.js
-    Date:    07/06/2026
-    Purpose: Validate the Bayou City Family Clinic intake form on the fly.
-             Every field warns the user as they type or leave it, and again
-             when the VALIDATE button is pressed. The real Submit button stays
-             hidden until there are zero errors.
-    Class:   MIS3371 | Professor Messinger | Assignment 3
+    File:    homework4.js
+    Date:    07/11/2026
+    Purpose: Everything from homework3.js (on-the-fly validation with a
+             validate-then-reveal Submit flow) PLUS the Assignment 4 features:
+             - Fetch API: loads the State dropdown options from states.html
+             - Cookies: remembers the user's first name for 48 hours
+             - Local Storage: saves/restores all NON-secure form fields
+             - "Not you?" new-user flow that expires the cookie and wipes storage
+    Class:   MIS3371 | Professor Messinger | Assignment 4
 */
+
+/* ============================================================
+   PAGE START-UP
+   Called from <body onload="initPage()"> in homework4.html.
+   ============================================================ */
+function initPage() {
+    loadStates();          // Fetch API: fill the State dropdown
+    checkReturningUser();  // Cookies: greet a returning user by name
+}
+
+/* ============================================================
+   1. FETCH API
+   Reads the state <option> list from states.html (a separate
+   file) and inserts it into the State dropdown. Uses try/catch
+   so a failed fetch can't break the rest of the page.
+   ============================================================ */
+async function loadStates() {
+    var select = document.getElementById("state");
+    try {
+        var response = await fetch("states.html");
+        if (!response.ok) {
+            throw new Error("HTTP status " + response.status);
+        }
+        var optionText = await response.text();
+        // Keep the blank "-- State --" option, add the fetched list after it.
+        select.innerHTML = "<option value=''>-- State --</option>" + optionText;
+        // If this user has a saved state in local storage, re-select it now
+        // (the dropdown didn't exist yet when restoreLocalData first ran).
+        var savedState = localStorage.getItem("bcfc_state");
+        if (savedState !== null) {
+            select.value = savedState;
+        }
+    } catch (err) {
+        console.log("Could not load states.html: " + err.message);
+        select.innerHTML = "<option value=''>-- States unavailable --</option>";
+    }
+}
+
+/* ============================================================
+   2. COOKIE HELPERS
+   setCookie / getCookie / deleteCookie, based on the W3Schools
+   cookie examples. Expiry is measured in HOURS (max 48 for
+   security, per the assignment).
+   ============================================================ */
+function setCookie(name, value, hours) {
+    var d = new Date();
+    d.setTime(d.getTime() + (hours * 60 * 60 * 1000));
+    document.cookie = name + "=" + value + "; expires=" + d.toUTCString() + "; path=/; SameSite=Lax";
+}
+
+function getCookie(name) {
+    var search = name + "=";
+    var parts = document.cookie.split(";");
+    var i;
+    var c;
+    for (i = 0; i < parts.length; i++) {
+        c = parts[i].trim();
+        if (c.indexOf(search) === 0) {
+            return c.substring(search.length);
+        }
+    }
+    return "";
+}
+
+function deleteCookie(name) {
+    // Setting an expiry date in the past removes the cookie.
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax";
+}
+
+/* ============================================================
+   RETURNING-USER CHECK (runs at page load)
+   If the firstname cookie exists: greet the user by name in the
+   header, pre-fill the First Name box, restore their saved data,
+   and show the dynamic "Not you?" new-user checkbox.
+   Otherwise: greet them as a new user.
+   ============================================================ */
+function checkReturningUser() {
+    var name = getCookie("firstname");
+    var welcome = document.getElementById("welcome-msg");
+    var newUserArea = document.getElementById("newuser-area");
+
+    if (name !== "") {
+        welcome.innerHTML = "Welcome back, " + name + "!";
+        document.getElementById("firstname").value = name;
+        restoreLocalData();
+        // Dynamic checkbox: lets a different person start fresh.
+        newUserArea.innerHTML =
+            "<input type='checkbox' id='notme' onclick='startAsNewUser()'> " +
+            "Not " + name + "? Click HERE to start as a NEW USER.";
+    } else {
+        welcome.innerHTML = "Welcome, New User!";
+        newUserArea.innerHTML = "";
+    }
+}
+
+/* "Not you?" was clicked: expire the cookie, wipe local storage,
+   clear the whole form, and greet as a brand-new user. */
+function startAsNewUser() {
+    deleteCookie("firstname");
+    clearLocalData();
+    document.getElementById("signup").reset();
+    clearReview();
+    document.getElementById("welcome-msg").innerHTML = "Welcome, New User!";
+    document.getElementById("newuser-area").innerHTML = "";
+}
+
+/* ============================================================
+   3. LOCAL STORAGE
+   Saves every NON-secure field as the user leaves it. The
+   password, confirm-password, and SSN fields are secure and are
+   NEVER written to local storage or cookies.
+   ============================================================ */
+
+/* Fields that are safe to keep in local storage. */
+var savedFields = ["patient-email", "patient-id", "firstname", "middlename",
+                   "lastname", "dob", "address", "address2", "city", "state",
+                   "zip", "phone", "pain-scale", "symptoms",
+                   "cb1", "cb2", "cb3", "cb4", "cb5", "cb6"];
+
+/* Wired to each non-secure field's onblur/onchange: saveLocal(this).
+   Only saves when the Remember Me box is checked. */
+function saveLocal(field) {
+    if (!document.getElementById("remember").checked) {
+        return;   // user said don't remember them
+    }
+    if (field.id === "password" || field.id === "password-confirm" || field.id === "ssn") {
+        return;   // never store secure items
+    }
+    if (field.type === "checkbox") {
+        localStorage.setItem("bcfc_" + field.id, field.checked ? "yes" : "no");
+    } else {
+        localStorage.setItem("bcfc_" + field.id, field.value);
+    }
+    // The first name also refreshes the tracking cookie (48-hour expiry).
+    if (field.id === "firstname" && field.value !== "") {
+        setCookie("firstname", field.value, 48);
+    }
+}
+
+/* Loops the saved-field list and saves everything at once.
+   Used when Remember Me is re-checked and on a successful validate. */
+function saveAllFields() {
+    var i;
+    var field;
+    for (i = 0; i < savedFields.length; i++) {
+        field = document.getElementById(savedFields[i]);
+        if (field !== null) {
+            saveLocal(field);
+        }
+    }
+}
+
+/* Reads local storage back into the form (returning users only). */
+function restoreLocalData() {
+    var i;
+    var field;
+    var saved;
+    for (i = 0; i < savedFields.length; i++) {
+        field = document.getElementById(savedFields[i]);
+        saved = localStorage.getItem("bcfc_" + savedFields[i]);
+        if (field !== null && saved !== null) {
+            if (field.type === "checkbox") {
+                field.checked = (saved === "yes");
+            } else {
+                field.value = saved;
+            }
+        }
+    }
+    // Keep the pain-scale display in sync with the restored slider value.
+    document.getElementById("pain-display").innerHTML =
+        document.getElementById("pain-scale").value;
+}
+
+/* Removes every saved item for this user. */
+function clearLocalData() {
+    var i;
+    for (i = 0; i < savedFields.length; i++) {
+        localStorage.removeItem("bcfc_" + savedFields[i]);
+    }
+}
+
+/* Remember Me checkbox handler.
+   UNchecked: expire the cookie and delete all local data.
+   REchecked: save the cookie and all current form data again. */
+function applyRemember() {
+    if (document.getElementById("remember").checked) {
+        saveAllFields();
+    } else {
+        deleteCookie("firstname");
+        clearLocalData();
+    }
+}
+
+/* ============================================================
+   Everything below is the Homework 3 validation code, unchanged
+   except for two bug fixes:
+   - validateForm() now calls checkID()  (was checkUserID)
+   - checkPassword() now compares against patient-id (was userid)
+   ============================================================ */
 
 /* Clears the review output and re-hides Submit. Wired to the Reset button. */
 function clearReview() {
@@ -127,10 +328,10 @@ function checkPassword() {
         msg.innerHTML = "Password needs a number.";
         return false;
     }
-    var uid = document.getElementById("userid").value;
-    if (uid !== "" && x === uid) {
+    var pid = document.getElementById("patient-id").value;
+    if (pid !== "" && x === pid) {
         msg.className = "error";
-        msg.innerHTML = "Password cannot be the same as your User ID.";
+        msg.innerHTML = "Password cannot be the same as your Patient ID.";
         return false;
     }
     msg.className = "ok";
@@ -351,11 +552,12 @@ function checkPhone() {
 
 /* VALIDATE button: checks EVERY field, counts errors, and only
    reveals the real Submit button when the count is 0. Also used
-   as the form's final onsubmit gate. */
+   as the form's final onsubmit gate. On success it honors the
+   Remember Me checkbox: save everything, or wipe everything. */
 function validateForm() {
     var errors = 0;
     if (!checkEmail())     { errors++; }
-    if (!checkUserID())    { errors++; }
+    if (!checkID())        { errors++; }
     if (!checkPassword())  { errors++; }
     if (!checkConfirm())   { errors++; }
     if (!checkFirstname()) { errors++; }
@@ -377,6 +579,14 @@ function validateForm() {
         status.className = "ok";
         status.innerHTML = "All fields look good. You can now submit.";
         submitBtn.style.display = "inline";
+        // Remember Me: save or wipe, depending on the checkbox.
+        if (document.getElementById("remember").checked) {
+            setCookie("firstname", document.getElementById("firstname").value, 48);
+            saveAllFields();
+        } else {
+            deleteCookie("firstname");
+            clearLocalData();
+        }
         return true;
     }
     status.className = "error";
@@ -385,4 +595,4 @@ function validateForm() {
     return false;
 }
 
-/* End of document: homework3.js */
+/* End of document: homework4.js */
