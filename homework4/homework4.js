@@ -2,8 +2,7 @@
     Name:    Zachary Nguyen
     File:    homework4.js
     Date:    07/11/2026
-    Purpose: Everything from homework3.js (on-the-fly validation with a
-             validate-then-reveal Submit flow) PLUS the Assignment 4 features:
+    Purpose: Assignment 4 features:
              - Fetch API: loads the State dropdown options from states.html
              - Cookies: remembers the user's first name for 48 hours
              - Local Storage: saves/restores all NON-secure form fields
@@ -11,21 +10,21 @@
     Class:   MIS3371 | Professor Messinger | Assignment 4
 */
 
-/* ============================================================
+/* 
    PAGE START-UP
    Called from <body onload="initPage()"> in homework4.html.
-   ============================================================ */
+    */
 function initPage() {
     loadStates();          // Fetch API: fill the State dropdown
     checkReturningUser();  // Cookies: greet a returning user by name
 }
 
-/* ============================================================
+/* 
    1. FETCH API
-   Reads the state <option> list from states.html (a separate
-   file) and inserts it into the State dropdown. Uses try/catch
-   so a failed fetch can't break the rest of the page.
-   ============================================================ */
+   Reads the state <option> list from states.html
+   and inserts it into the State dropdown. Uses try/catch
+   so a failed fetch wont't break the rest of the page.
+    */
 async function loadStates() {
     var select = document.getElementById("state");
     try {
@@ -36,8 +35,7 @@ async function loadStates() {
         var optionText = await response.text();
         // Keep the blank "-- State --" option, add the fetched list after it.
         select.innerHTML = "<option value=''>-- State --</option>" + optionText;
-        // If this user has a saved state in local storage, re-select it now
-        // (the dropdown didn't exist yet when restoreLocalData first ran).
+        // If this user has a locally saved state in, re-select it now.
         var savedState = localStorage.getItem("bcfc_state");
         if (savedState !== null) {
             select.value = savedState;
@@ -48,12 +46,12 @@ async function loadStates() {
     }
 }
 
-/* ============================================================
+/* 
    2. COOKIE HELPERS
    setCookie / getCookie / deleteCookie, based on the W3Schools
    cookie examples. Expiry is measured in HOURS (max 48 for
-   security, per the assignment).
-   ============================================================ */
+   security as required in assignment instructions).
+    */
 function setCookie(name, value, hours) {
     var d = new Date();
     d.setTime(d.getTime() + (hours * 60 * 60 * 1000));
@@ -79,13 +77,13 @@ function deleteCookie(name) {
     document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax";
 }
 
-/* ============================================================
+/* 
    RETURNING-USER CHECK (runs at page load)
    If the firstname cookie exists: greet the user by name in the
    header, pre-fill the First Name box, restore their saved data,
-   and show the dynamic "Not you?" new-user checkbox.
-   Otherwise: greet them as a new user.
-   ============================================================ */
+   and show the "Not you?" new-user checkbox.
+   If not a returning user, greet them as a new user.
+    */
 function checkReturningUser() {
     var name = getCookie("firstname");
     var welcome = document.getElementById("welcome-msg");
@@ -98,7 +96,7 @@ function checkReturningUser() {
         // Dynamic checkbox: lets a different person start fresh.
         newUserArea.innerHTML =
             "<input type='checkbox' id='notme' onclick='startAsNewUser()'> " +
-            "Not " + name + "? Click HERE to start as a NEW USER.";
+            "Not ? Click HERE to start as a NEW USER.";
     } else {
         welcome.innerHTML = "Welcome, New User!";
         newUserArea.innerHTML = "";
@@ -118,9 +116,8 @@ function startAsNewUser() {
 
 /* ============================================================
    3. LOCAL STORAGE
-   Saves every NON-secure field as the user leaves it. The
-   password, confirm-password, and SSN fields are secure and are
-   NEVER written to local storage or cookies.
+   Saves every NON-secure field as the user leaves it. This does not include
+   password, confirm-password, and SSN fields as they are secure.
    ============================================================ */
 
 /* Fields that are safe to keep in local storage. */
@@ -162,7 +159,7 @@ function saveAllFields() {
     }
 }
 
-/* Reads local storage back into the form (returning users only). */
+/* Reads local storage back into the form for returning users only. */
 function restoreLocalData() {
     var i;
     var field;
@@ -192,8 +189,8 @@ function clearLocalData() {
 }
 
 /* Remember Me checkbox handler.
-   UNchecked: expire the cookie and delete all local data.
-   REchecked: save the cookie and all current form data again. */
+   Unchecked: expire the cookie and delete all local data.
+   Rechecked: save the cookie and all current form data again. */
 function applyRemember() {
     if (document.getElementById("remember").checked) {
         saveAllFields();
@@ -203,12 +200,10 @@ function applyRemember() {
     }
 }
 
-/* ============================================================
-   Everything below is the Homework 3 validation code, unchanged
+/* Everything below is the Homework 3 validation code, unchanged
    except for two bug fixes:
    - validateForm() now calls checkID()  (was checkUserID)
-   - checkPassword() now compares against patient-id (was userid)
-   ============================================================ */
+   - checkPassword() now compares against patient-id (was userid)*/
 
 /* Clears the review output and re-hides Submit. Wired to the Reset button. */
 function clearReview() {
@@ -266,7 +261,7 @@ function reviewData() {
 }
 
 /*
-   Field validators. Each grabs its value, checks it, and writes
+   Each field validator grabs its value, checks it, and writes
    a message to its own <span>. Returns true if valid, false if not.
 */
 
@@ -304,7 +299,7 @@ function checkID() {
     return true;
 }
 
-/* Password: checks as you type (on the fly) */
+/* Password: checks as you type */
 function checkPassword() {
     var x = document.getElementById("password").value;
     var msg = document.getElementById("password-error");
@@ -551,8 +546,7 @@ function checkPhone() {
 }
 
 /* VALIDATE button: checks EVERY field, counts errors, and only
-   reveals the real Submit button when the count is 0. Also used
-   as the form's final onsubmit gate. On success it honors the
+   reveals the real Submit button when the count is 0.On success it honors the
    Remember Me checkbox: save everything, or wipe everything. */
 function validateForm() {
     var errors = 0;
