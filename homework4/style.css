@@ -3,7 +3,7 @@
    Name:    Zachary Nguyen
    Date:    06/11/2026
    Purpose: External stylesheet for index.html applies the styling for the
-   Class: MIS3371 | Professor Messinger | Assignment 1
+   Class: MIS3371 | Professor Messinger | Assignment 1 / Assignment 2 / Assignment 3 / Assignment 4
    .html file
 */
 
@@ -65,4 +65,19 @@ input[type="date"] {
 /*  Footer  */
 #footer {
     padding: 4px;
+}
+
+/*  Validation messages: red = error, green = ok.*/
+.error {
+        color: red;
+        display: block;
+        min-height: 1.2em;
+        font-size: 14px;
+}
+    
+.ok {
+        color: lightgreen;
+        display: block;
+        min-height: 1.2em;
+        font-size: 14px;
 }
