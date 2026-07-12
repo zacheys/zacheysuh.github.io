@@ -1,0 +1,72 @@
+<!doctype html>
+<!--
+    Name:       Zachary Nguyen
+    File:       thankyou.html
+    Date:       07/06/2026
+    Purpose:    Confirmation page shown after a validated Bayou City Family Clinic
+                intake form is submitted.
+    Class:      MIS3371 | Professor Messinger | Assignment 3
+-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Bayou City Family Clinic - Thank You</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
+        <!-- HEADER -->
+        <div id="header">
+        <table>
+        <tr>
+        <td>
+        <img
+            id="logo"
+            src="hospitallogo.png"
+            alt="Bayou City Family Clinic"
+            height="150"
+            >
+        </td>
+        <td valign="top">Bayou City Family Clinic</td>
+        <td valign="bottom" align="right">
+        Today's date: <span id="today">Date goes here</span>
+        </td>
+        </tr>
+        </table>
+        </div>
+
+        <hr>
+
+        <!-- BODY: confirmation message -->
+        <div id="body">
+        <table class="form">
+        <tr>
+        <th class="form">Submission Received</th>
+        </tr>
+        <tr>
+        <td class="field">
+        <p>Thank you for your submission. We will be contacting you shortly.</p>
+        <p><a href="index.html">Return to the intake form</a></p>
+        </td>
+        </tr>
+        </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div id="footer">
+        <hr>
+        Bayou City Family Clinic
+        <p>
+        <a href="mailto:info@bayoucityclinic.com">Contact Us</a>
+        </p>
+        </div>
+
+        <!-- Fill in today's date -->
+        <script>
+            document.getElementById("today").innerHTML = new Date().toLocaleDateString();
+        </script>
+
+    </body>
+    <!-- End of file: thankyou.html -->
+</html>
